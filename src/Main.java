@@ -3,5 +3,6 @@ void main() {
     for (int i = 1; i <= 5; i++) {
         // TODO de prueba
         System.out.println("Hola que tal");
+        System.out.print(i);
     }
 }
