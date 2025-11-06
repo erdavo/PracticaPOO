@@ -1,3 +1,3 @@
 public class Plantilla {
-    private Usuario[] ususario;
+    //esto no es una clase, es un atributo dentro de nuestra clase general.
 }

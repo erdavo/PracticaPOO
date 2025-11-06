@@ -1,3 +1,4 @@
 public class AgendaCita {
-    private Cita[] listaCitas;
+    //esto no es una clase, es un atributo dentro de nuestra clase general
+    // y trendremos un ArrayList<> de citas.
 }

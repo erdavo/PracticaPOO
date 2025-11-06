@@ -1,10 +1,12 @@
-void main() {
-    IO.println(String.format("Hello and welcome!"));
-    for (int i = 1; i <= 5; i++) {
-        // TODO de prueba
-        System.out.println("Hola que tal");
+import java.time.LocalDateTime;
 
-        System.out.println("Quinza gay");
+public class Main {
+    public static void main(String[] args) {
+        Prueba lab = new Laboratorio(LocalDateTime.now(), "Hospital Central", "informe_lab.pdf");
+        Prueba img = new Imagen(LocalDateTime.now(), "Hospital Central", "informe_img.pdf", "tac001.jpg");
 
+        System.out.println(lab);
+        System.out.println(img);
     }
 }
+
