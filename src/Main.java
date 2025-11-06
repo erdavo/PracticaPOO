@@ -4,6 +4,6 @@ void main() {
         // TODO de prueba
         System.out.println("Hola que tal");
 
-        System.out.println("hasioahsdfkjahsdflkasjfhasdf");
+        System.out.println("Quinza gay");
     }
 }
