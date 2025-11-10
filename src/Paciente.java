@@ -10,7 +10,7 @@ public class Paciente extends Usuario{
         this.nombre=nombre;
         this.direccion=direccion;
         this.telefono=telefono;
-        this.cita= new Cita();
+        //this.cita= new Cita();    Esto deberia de ser array  ya que el paciente no tien porque tener solo una cita
         this.historial= new Historial();
     }
 

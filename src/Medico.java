@@ -6,5 +6,8 @@ public class Medico extends Usuario{
 
     public Medico(String dni, long cipa, String centro, String especialidad){
         super(dni,cipa);
+        this.especialidad=especialidad;
+        this.centro=centro;
+        this.citas= new Cita[MAXCITASDIARIAS];
     }
 }
