@@ -5,5 +5,5 @@ public class Sistema {
     ArrayList<ListaPaciente> listaPacientes;
     ArrayList<AgendaConsultas>  agendaConsultas;
     ArrayList<AgendaCita> agendaCitas;
-
+    ArrayList<Plantilla> plantilla;
 }

@@ -10,4 +10,11 @@ public class Medico extends Usuario{
         this.centro=centro;
         this.citas= new Cita[MAXCITASDIARIAS];
     }
+    public String getEspecialidad() {
+        return especialidad;
+    }
+
+    public String getCentro() {
+        return centro;
+    }
 }

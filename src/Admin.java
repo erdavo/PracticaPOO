@@ -4,4 +4,5 @@ public class Admin extends Usuario{
         super(dni, cipa);
     }
 
+
 }
