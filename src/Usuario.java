@@ -9,7 +9,7 @@ public abstract class Usuario implements Serializable {
     private static final int MAXDNI=9;
     private final String dni;  // Identificador (String)
     private final long cipa; // Código de 10 dígitos
-    private final Plantilla plantilla;
+
 
     public Usuario(String dni, long cipa){
 
@@ -20,10 +20,10 @@ public abstract class Usuario implements Serializable {
         }
         this.cipa=cipa;
 
-        // esto pq lo pone el UML no sé muy bien que es lo de plantilla
-        this.plantilla = new Plantilla();
+
     }
 
+    
     public String validarStrings(String string){
         if (string == null || string.isEmpty()){
             throw new IllegalArgumentException("Error en DNI, por favor, compruebe que el DNI introducido es valido.");
