@@ -43,6 +43,8 @@ public class Cita {
     public String getCausaAnulacion() {
         return causaAnulacion;
     }
+    public Paciente getPaciente() {return paciente;}
+    public Medico getMedico() {return medico;}
 
     //Setters
     public void setFechaHora(LocalDateTime fechaNueva) {
