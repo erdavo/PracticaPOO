@@ -1,19 +1,15 @@
 import java.time.LocalDateTime;
 
 public class Cita {
-    private LocalDateTime fechaHora;
+    private LocalDateTime fechaCita;
     private boolean anulada = false;
     private String causaAnulacion;
     private LocalDateTime fechaCancelacion;
     private Paciente paciente;
     private Medico medico;
 
-    public Cita(LocalDateTime fechaHora, boolean anulada, Paciente paciente, Medico medico, String causaAnulacion) {
-        this.fechaHora = fechaHora;
-        this.anulada = anulada;
-        if (anulada == true) {
-            this.causaAnulacion = validarCausa(causaAnulacion);
-        }
+    public Cita(LocalDateTime fechaCita, Paciente paciente, Medico medico) {
+        this.fechaCita = fechaCita;
         this.paciente = paciente;
         this.medico = medico;
     }
@@ -25,17 +21,9 @@ public class Cita {
         return string;
     }
 
-    /* No le veo el sentido
-    public Cita(Cita cita) {
-        this.fechaHora = cita.getFechaHora();
-        this.anulada = cita.isAnulada();
-        this.causaAnulacion = cita.getCausaAnulacion();
-    }
-    */
-
     //Getters
     public LocalDateTime getFechaHora() {
-        return fechaHora;
+        return fechaCita;
     }
     public boolean isAnulada() {
         return anulada;
@@ -51,7 +39,7 @@ public class Cita {
         if (fechaNueva.isBefore(LocalDateTime.now())) {
             throw new IllegalStateException("La fecha tiene que ser mayor a hoy.");
         }
-        this.fechaHora = fechaNueva;
+        this.fechaCita = fechaNueva;
     }
 
     //esto reprograma la cita que llama al metodo, no otra
@@ -60,8 +48,9 @@ public class Cita {
         this.setFechaHora(fechaNueva);
     }
 
-    //esto cancela la cita que llama al metodp, no otra.
-    public void cancelar(String causaAnulacion){
+
+    //esto cancela la cita que llama al metodo, no otra.
+    public void cancelarCita(String causaAnulacion){
         if (!anulada){
             this.anulada = true;
             this.causaAnulacion = validarCausa(causaAnulacion);
@@ -69,6 +58,4 @@ public class Cita {
         }
 
     }
-
-
 }

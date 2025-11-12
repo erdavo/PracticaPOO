@@ -9,8 +9,6 @@ public abstract class Usuario implements Serializable {
     private static final int MAXDNI=9;
     private final String dni;  // Identificador (String)
     private final long cipa; // Código de 10 dígitos
-
-    // "Plantilla" (es de la composición en el UML).
     private final Plantilla plantilla;
 
     public Usuario(String dni, long cipa){

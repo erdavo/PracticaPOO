@@ -1,3 +1,5 @@
+import javax.tools.JavaCompiler;
+
 /**
  * Representa a un médico.
  * Hereda de Usuario y hay que añadir 'especialidad' y 'centro'.
@@ -8,29 +10,34 @@ public class Medico extends Usuario{
     private final String especialidad;
     private final String centro;
     private final int MAXCITASDIARIAS = 20;
-    private Cita[] citas;
+    private int numCitasAsignadas;
+    private AgendaCita citas;
 
     public Medico(String dni, long cipa, String centro, String especialidad){
         super(dni,cipa);
 
         if (especialidad == null || especialidad.isEmpty()){
-            throw new IllegalArgumentException("La especialidad no puede estar vacía ni ser null.");
+            throw new IllegalArgumentException("Especialidad no valida.");
         }
         this.especialidad=especialidad;
 
         if (centro == null || centro.isEmpty()){
-            throw new IllegalArgumentException("El centro no puede estar vacío ni ser null.");
+            throw new IllegalArgumentException("Centro no valido.");
         }
         this.centro=centro;
 
-        this.citas= new Cita[MAXCITASDIARIAS];
+        this.citas= new AgendaCita();
     }
+
+
     public String getEspecialidad() {
         return especialidad;
     }
-
     public String getCentro() {
         return centro;
+    }
+    public int getMAXCITASDIARIAS() {
+        return MAXCITASDIARIAS;
     }
 
     @Override
@@ -41,4 +48,6 @@ public class Medico extends Usuario{
                 ", Especialidad: " + getEspecialidad() +
                 ", Centro: " + getCentro() + " }";
     }
+
+
 }

@@ -1,3 +1,6 @@
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+
 /**
  * Representa a un paciente.
  * Hereda de Usuario y añade los atributos 'nombre', 'direccion', 'telefono'.
@@ -8,17 +11,15 @@ public class Paciente extends Usuario{
     private String nombre;
     private String direccion;
     private long telefono;
-    private Cita[] cita;
+    private ArrayList<Cita> citas; // las suyas propias
     private Historial historial;
 
-    public Paciente(String dni, long cipa, String nombre, String direccion, long telefono, Cita[] cita, Historial historial) {
-        //preguntar a estefania porque no deja hacer la validacion dentro de la llamada a super
+    public Paciente(String dni, long cipa, String nombre, String direccion, long telefono) {
         super(dni, cipa);
-        this.nombre=validarStrings(nombre);
-        this.direccion=validarStrings(direccion);
-        this.telefono=validarTelefono(telefono);
-        this.cita= new Cita[cita.length];    //Esto deberia de ser array  ya que el paciente no tien porque tener solo una cita
-        this.historial= new Historial();
+        this.nombre = validarStrings(nombre);
+        this.direccion = validarStrings(direccion);
+        this.telefono = validarTelefono(telefono);
+        this.historial = new Historial();
     }
 
     private long validarTelefono(long telefono){
@@ -27,6 +28,7 @@ public class Paciente extends Usuario{
     }
 
     //getters
+
 
     public String getNombre(){
         return nombre;
@@ -82,9 +84,14 @@ public class Paciente extends Usuario{
         this.historial = historial;
     }
 
-    public Cita nuevaCita(){ //Esta mal asi pero es para ir poniendolo
-        Cita aux;
-        return cita[cita.length];
+    public void nuevaCita(LocalDateTime fecha,Medico medico){
+        cita.addCita(fecha, this, medico);
+    }
+
+
+    public void solicitarCita(Sistema sistema, String especialidad){
+        sistema.solicitarCita(this, especialidad);
+        cita.addCita();
     }
 
 
