@@ -84,7 +84,7 @@ public class Paciente extends Usuario{
         this.historial = historial;
     }
 
-    public void nuevaCita(LocalDateTime fecha,Medico medico){
+    /*public void nuevaCita(LocalDateTime fecha,Medico medico){
         cita.addCita(fecha, this, medico);
     }
 
@@ -93,6 +93,6 @@ public class Paciente extends Usuario{
         sistema.solicitarCita(this, especialidad);
         cita.addCita();
     }
-
+    */
 
 }
