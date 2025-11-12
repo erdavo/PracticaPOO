@@ -10,7 +10,6 @@ public class Medico extends Usuario{
     private final String especialidad;
     private final String centro;
     private final int MAXCITASDIARIAS = 20;
-    private int numCitasAsignadas;
     private AgendaCita citas;
 
     public Medico(String dni, long cipa, String centro, String especialidad){

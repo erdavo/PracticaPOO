@@ -5,7 +5,9 @@ public class AgendaConsultas {
     // y trendremos un ArrayList<> de Consultas.
 
     private ArrayList<Consulta> agendaConsultas;
-    public AgendaConsultas(){   agendaConsultas= new ArrayList<>(); }
+    public AgendaConsultas(){
+        agendaConsultas= new ArrayList<>();
+    }
     public ArrayList<Consulta> getAgendaConsultas() {
         return agendaConsultas;
     }
