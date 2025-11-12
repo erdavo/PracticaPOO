@@ -8,4 +8,10 @@ public class    AgendaCita {
     public AgendaCita(){
         arrayListCitas = new ArrayList<>();
     }
+
+    public ArrayList<Cita> getArrayListCitas() {
+        return arrayListCitas;
+    }
+
+
 }

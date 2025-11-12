@@ -2,15 +2,15 @@ import java.util.ArrayList;
 
 public class Sistema {
     //Esta clase la usaremos para centralizar las operaciones
-    ArrayList<Paciente> listaPacientes;
-    ArrayList<Consulta>  agendaConsultas;
-    ArrayList<Cita> agendaCitas;
-    ArrayList<Usuario> plantilla;
-    public Sistema() {
-        listaPacientes = new ArrayList<Paciente>();
-        agendaConsultas = new ArrayList<Consulta>();
-        agendaCitas = new ArrayList<Cita>();
-        plantilla = new ArrayList<Usuario>();
+    private ListaPaciente listaPacientes;
+    private AgendaConsultas  agendaConsultas;
+    private AgendaCita agendaCitas;
+    private Plantilla plantilla;
+    public Sistema(ListaPaciente listaPacientes,  AgendaConsultas agendaConsultas,  AgendaCita agendaCitas, Plantilla plantilla) {
+        this.listaPacientes = listaPacientes;
+        this.agendaConsultas = agendaConsultas;
+        this.agendaCitas = agendaCitas;
+        this.plantilla= plantilla;
     }
 
     //Getter de los arraylist
