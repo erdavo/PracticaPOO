@@ -9,11 +9,14 @@ import java.util.Scanner;
  */
 
 public class Paciente extends Usuario{
+    //Datos administrativos
     private String nombre;
     private String direccion;
     private long telefono;
-    private AgendaCita citas; // las suyas propias
-    private Historial historial;
+
+    //Datos clinicos
+    private AgendaCita listaCitasPropias;
+    private Historial historialClinico;
 
     public Paciente(String dni, long cipa, String nombre, String direccion, long telefono) {
         super(dni, cipa);
@@ -21,7 +24,7 @@ public class Paciente extends Usuario{
         this.direccion = validarStrings(direccion);
         this.telefono = validarTelefono(telefono);
         citas = new AgendaCita();
-        this.historial = new Historial();
+        this.historialClinico = new Historial();
     }
 
     public static Paciente crearPaciente() {
@@ -78,6 +81,7 @@ public class Paciente extends Usuario{
             System.out.print("Teléfono: ");
             telefonoStr = sc.nextLine().trim();
 
+
             if (!telefonoStr.matches("\\d+")) {
                 System.out.println("Error: el teléfono debe contener solo números.");
             } else {
@@ -115,7 +119,7 @@ public class Paciente extends Usuario{
     //public Cita getCita() {return cita;}
 
     public Historial getHistorial() {
-        return historial;
+        return historialClinico;
     }
 
     //Setters
@@ -131,7 +135,7 @@ public class Paciente extends Usuario{
      * Ademas como el enunciado dice:
      * "El administrador de la aplicación:
      * - Tendrá acceso a poder realizar cualquier operación sobre la aplicación."
-     * Hemos añadido la comprobacion correspondiente: validarAdminCentroSalud.p
+     * Hemos añadido la comprobacion correspondiente: validarAdminCentroSalud.
      */
     private void validarAdminCentroSalud(Usuario usuario) {
         if (!(usuario instanceof Admin || usuario instanceof AdminCentroSalud)) {
@@ -150,20 +154,17 @@ public class Paciente extends Usuario{
         this.telefono = validarTelefono(telefono);
     }
 
-    //public void setCita(Cita cita) {this.cita = cita;}
-    public void setHistorial(Historial historial) {
-        this.historial = historial;
+    public String getDatosAdministrativos() {
+        return "Nombre: " + nombre + "\n" +
+                "DNI: " + getDni() + "\n" +
+                "CIPA: " + getCipa() + "\n" +
+                "Teléfono: " + telefono + "\n" +
+                "Dirección: " + direccion;
     }
 
-    /*public void nuevaCita(LocalDateTime fecha,Medico medico){
-        cita.addCita(fecha, this, medico);
+    public String getDatosClinicos() {
+        return historialClinico.toString();
     }
 
-
-    public void solicitarCita(Sistema sistema, String especialidad){
-        sistema.solicitarCita(this, especialidad);
-        cita.addCita();
-    }
-    */
 
 }

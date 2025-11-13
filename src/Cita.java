@@ -22,7 +22,7 @@ public class Cita {
     }
 
     //Getters
-    public LocalDateTime getFechaHora() {
+    public LocalDateTime getFechaCita {
         return fechaCita;
     }
     public boolean isAnulada() {
@@ -35,7 +35,7 @@ public class Cita {
     public Medico getMedico() {return medico;}
 
     //Setters
-    public void setFechaHora(LocalDateTime fechaNueva) {
+    public void setFechaCita(LocalDateTime fechaNueva) {
         if (fechaNueva.isBefore(LocalDateTime.now())) {
             throw new IllegalStateException("La fecha tiene que ser mayor a hoy.");
         }
@@ -45,7 +45,7 @@ public class Cita {
     //esto reprograma la cita que llama al metodo, no otra
     public void reprogramarCita(LocalDateTime fechaNueva){
         if(isAnulada()) throw new IllegalStateException("No se puede reagendar una cita anulada.");
-        this.setFechaHora(fechaNueva);
+        this.setFechaCita(fechaNueva);
     }
 
 

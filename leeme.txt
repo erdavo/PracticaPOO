@@ -1,0 +1,6 @@
+1. Uso de trim() en las entradas
+Se utiliza trim() para eliminar espacios accidentales en los datos introducidos
+por el usuario y evitar errores en las validaciones.
+Ejemplo: si el usuario escribe 123456789 A o 123456789A, el sistema lo interpreta correctamente como 123456789A.
+No se comenta cada uso para evitar repeticiones.
+

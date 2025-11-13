@@ -5,8 +5,8 @@ public class ListaPaciente {
 
     public ListaPaciente(){
 
-        listaPacientes= new ArrayList<Paciente>();
-        listaPacientes.add(new Paciente("4", 4234567890L, "Pedro", "Coche", 331));
+        listaPacientes= new ArrayList<>();
+        listaPacientes.add(new Paciente("4A", 4234567890L, "Pedro", "Direccion1", 1));
     }
 
     public ArrayList<Paciente> getListaPacientes() {

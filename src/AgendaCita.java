@@ -2,7 +2,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 public class AgendaCita {
-    private ArrayList<Cita> agendaCitas; //aqui se almacenan todas las citas
+    private ArrayList<Cita> agendaCitas;
     private static final int SLOT_MIN = 30;
 
     public AgendaCita(){
