@@ -135,6 +135,13 @@ public class AgendaCita {
 
     }
 
+    public void eliminarCita(Cita cita){
+        for (Cita c: agendaCitas){
+            if(c.equals(cita)){
+                c.cancelarCita("Modificar");
+            }
+        }
+    }
 
     // =========== LOGICA DE ADMIN ========
 }

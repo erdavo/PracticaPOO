@@ -10,6 +10,7 @@ public class Sistema {
     private AgendaCita agendaCitas;
     private Plantilla plantilla;
 
+
     public Sistema() {
         this.listaPacientes = new ListaPaciente();
         this.agendaConsultas = new AgendaConsultas();
@@ -354,14 +355,35 @@ public class Sistema {
             System.out.println("No tienes citas todavia");
             return;
         }
+        //Mostrar todas las citas que tiene ese paciente y que seleccione la que quiere modificar
         agendaCitas.mostrarCitasPaciente(citasPaciente);
 
-        //Mostrar todas las citas que tiene ese paciente y que seleccione la que quiere modificar
-        //Eliminar de la agenda del médico la cita anulada.
-        //Cambiar el estado de la cita y que ponga el motivo.
+        int opcion;
+        do {
+            System.out.print("Introduce una opción: ");
+            while (!sc.hasNextInt()) {
+                System.out.println("Entrada no válida. Debes introducir un número.");
+                System.out.print("Elige una cita: ");
+                sc.next(); // limpiar entrada incorrecta
+            }
+
+            opcion = sc.nextInt();
+            sc.nextLine();
+
+            if (opcion <= 0 || opcion > citasPaciente.size()) {
+                System.out.println("Opción fuera de rango. Intente de nuevo.");
+            }
+
+        } while (opcion <= 0 || opcion > citasPaciente.size());
+        //Una vez selecciona la cita tenemos anulamos esa cita y solicitamos una nueva cita
+        Cita citaAntigua = citasPaciente.get(opcion-1);
+        solicitarCitaMedica(sc, paciente);
+        agendaCitas.eliminarCita(citaAntigua);
+        citasPaciente.remove(opcion-1);
         //Notificcar al usuario que su cita se ha modificado correctamente
 
     }
+
 
 
 }
