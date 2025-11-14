@@ -1,14 +1,19 @@
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Sistema {
     private ListaPaciente listaPacientes;
     private AgendaConsultas agendaConsultas;
+    private AgendaCita agendaCitas;
     private Plantilla plantilla;
 
     public Sistema() {
         this.listaPacientes = new ListaPaciente();
         this.agendaConsultas = new AgendaConsultas();
         this.plantilla = new Plantilla();
+        this.agendaCitas = new AgendaCita();
     }
 
     /**
@@ -49,6 +54,7 @@ public class Sistema {
                 }
                 case 2 -> {
                     System.out.println("Saliendo del sistema...");
+                    sc.close();
                     salir = true;
                 }
 
@@ -246,7 +252,92 @@ public class Sistema {
 
 
     // ==== LOGICA DEL PACIENTE ====
-    private void solicitarCitaMedica(Scanner sc, Paciente p) {
-        // teneemos el paciente, ahora tenemos que mostrarle las citas disponibles para que pueda elegir
+    private void solicitarCitaMedica(Scanner sc, Paciente paciente) {
+        // mostramos especialidades
+        System.out.println("Estas son las especialidades disponibles: \n");
+        mostrarEspecialidades();
+        //decimos que elija
+        int opcion;
+        do {
+            System.out.print("Introduce una opción válida: ");
+            while (!sc.hasNextInt()) {
+                System.out.println("Entrada no válida. Debes introducir un número.");
+                System.out.print("Elige una opción: ");
+                sc.next(); // limpiar entrada incorrecta
+            }
+
+            opcion = sc.nextInt();
+            sc.nextLine();
+
+            if (opcion <= 0 || opcion > Especialidad.values().length) {
+                System.out.println("Opción fuera de rango. Intente de nuevo.");
+            }
+
+        } while (opcion <= 0 || opcion > Especialidad.values().length);
+
+
+        //almacenamos la que sea que nos diga
+        Especialidad especialidad = Especialidad.values()[opcion -1];
+
+        // tenemos que mostrar las citas disponibles para que pueda elegir
+        ArrayList<Medico> listMedicos = plantilla.getMedicosPorEspecialidad(especialidad);
+        if(listMedicos.isEmpty()){
+            System.out.println("No hay médicos disponibles de esta especialidad.");
+        }else { // si hay al menos un médico de esa especialidad
+            //buscamos por cada médico los huecos disponibles
+            ArrayList<LocalDateTime> huecosDisponibles = agendaCitas.obtenerHuecosDisponibles(listMedicos);
+
+            if (huecosDisponibles.isEmpty()) {
+                System.out.println("No hay citas disponibles en este momento.");
+            }else{ // hay al menos una cita disponible
+                //mostramos que huecos hay.
+                System.out.println("\nCitas disponibles:");
+                // Formato bonito para fechas
+                DateTimeFormatter fmt = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
+
+                for (int i = 0; i < huecosDisponibles.size(); i++) {
+                    System.out.println((i + 1) + ". " + huecosDisponibles.get(i).format(fmt));
+                }
+
+                // Le pedimos al usuario uno de los huecos disponibles ¡OJO!: Esto todavía no es una cita
+                System.out.print("Seleccione una opción: ");
+                int citaElegida;
+                do {
+                    citaElegida = sc.nextInt();
+                    sc.nextLine();
+                } while(citaElegida <= 0 || citaElegida > huecosDisponibles.size());
+
+                //guardamos la hora que ha seleccionado el usuario
+                LocalDateTime fechaElegida = huecosDisponibles.get(citaElegida-1);
+
+                //buscamos que medico tiene la hroa libre y el primero que encuentre con la hora libre, lo guardamos
+                Medico medicoAsignado = null;
+                for (Medico m : listMedicos){
+                    if(agendaCitas.estaLibre(m, fechaElegida)){
+                        medicoAsignado = m;
+                        break;
+                    }
+                }
+                if (medicoAsignado == null) {
+                    System.out.println("Error al asignar médico. Intente más tarde.");
+                }else {
+                    Cita nuevaCita = new Cita(fechaElegida, paciente, medicoAsignado);
+                    agendaCitas.addCita(nuevaCita);
+                    System.out.println("Cita creada correctamente:");
+                    System.out.println("Fecha: " + fechaElegida.format(fmt));
+                    System.out.println("Médico: " + medicoAsignado);
+                }
+
+
+            }
+        }
+    }
+
+    private void mostrarEspecialidades() {
+        int i = 1;
+        for (Especialidad e : Especialidad.values()) {
+            System.out.println(i + ". " + e);
+            i++;
+        }
     }
 }

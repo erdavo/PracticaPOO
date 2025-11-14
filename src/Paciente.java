@@ -15,7 +15,7 @@ public class Paciente extends Usuario{
     private long telefono;
 
     //Datos clinicos
-    private AgendaCita listaCitasPropias;
+//    private AgendaCita listaCitasPropias; lo mismo que en paciente TODO QUITARLO
     private Historial historialClinico;
 
     public Paciente(String dni, long cipa, String nombre, String direccion, long telefono) {
@@ -23,7 +23,7 @@ public class Paciente extends Usuario{
         this.nombre = validarStrings(nombre);
         this.direccion = validarStrings(direccion);
         this.telefono = validarTelefono(telefono);
-        citas = new AgendaCita();
+//        this.listaCitasPropias = new AgendaCita(); TODO QUITARLO
         this.historialClinico = new Historial();
     }
 

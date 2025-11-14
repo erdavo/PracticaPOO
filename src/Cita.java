@@ -1,12 +1,14 @@
 import java.time.LocalDateTime;
 
 public class Cita {
-    private LocalDateTime fechaCita;
-    private boolean anulada = false;
-    private String causaAnulacion;
-    private LocalDateTime fechaCancelacion;
     private Paciente paciente;
     private Medico medico;
+
+    private LocalDateTime fechaCita;
+    private boolean anulada;
+
+    private LocalDateTime fechaCancelacion;
+    private String causaAnulacion;
 
     public Cita(LocalDateTime fechaCita, Paciente paciente, Medico medico) {
         this.fechaCita = fechaCita;
@@ -22,7 +24,7 @@ public class Cita {
     }
 
     //Getters
-    public LocalDateTime getFechaCita {
+    public LocalDateTime getFechaCita(){
         return fechaCita;
     }
     public boolean isAnulada() {
@@ -58,4 +60,23 @@ public class Cita {
         }
 
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null) return false;
+        if (obj.getClass() != this.getClass()) return false;
+
+        Cita otra = (Cita) obj;
+
+        return this.fechaCita.equals(otra.fechaCita)
+                && this.medico.equals(otra.medico)
+                && this.paciente.equals(otra.paciente);
+    }
+
+    @Override
+    public int hashCode() {
+        return fechaCita.hashCode() + medico.hashCode() + paciente.hashCode();
+    }
+
 }

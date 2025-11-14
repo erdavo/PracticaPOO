@@ -3,7 +3,8 @@ import java.util.ArrayList;
 
 public class AgendaCita {
     private ArrayList<Cita> agendaCitas;
-    private static final int SLOT_MIN = 30;
+    private static final int TIEMPO_CITA = 30;
+    private static final int DIAS_BUSQUEDA = 7;
 
     public AgendaCita(){
         agendaCitas = new ArrayList<>();
@@ -14,26 +15,85 @@ public class AgendaCita {
     }
 
     public void addCita(Cita cita) {
-        if (agendaCitas.contains(cita)){
-            throw new IllegalArgumentException("La cita ya está en el sistema.");
+        if(agendaCitas.contains(cita)){
+            throw new IllegalArgumentException("La cita ya existe.");
         }
         agendaCitas.add(cita);
-
     }
 
     public void addCita(LocalDateTime fechaCita, Paciente paciente, Medico medico){
         addCita(new Cita(fechaCita,paciente, medico));
     }
 
-    public ArrayList<Cita> AgendaMedico(Medico medico){
-        ArrayList<Cita> aux;
-        aux=new ArrayList<>();
-        for (int i = 0; i < agendaCitas.size(); i++) {
-            if (agendaCitas.get(i).getMedico().equals(medico)) {
-                aux.add(agendaCitas.get(i));
+    /** Este metodo recorre el arraylist, mirando que horas están disponibles,
+     * pero no dice que medico es, por lo que hay que buscarlo luego
+     * */
+    public boolean estaLibre(Medico medico, LocalDateTime fecha) {
+        for (Cita c : agendaCitas){
+            //tenemos que mirar que el medico sea el mismo, y la misma fecha y que no este anulada
+            if (c.getMedico().equals(medico) && c.getFechaCita().equals(fecha) && !c.isAnulada()){
+                return false; // esta ocupada
             }
         }
-        return aux;
+        return true; // No se ha encontrado ninguna cita, por tanto está libre
+    }
+
+    /** Dada una lista de medicos de una misma especialidad, devuelve todas las horas en las
+     * que al menos un médico de esos está libre en los proximos 7 días, por ejemplo
+     */
+    //TODO LO HE HECHO EN UN MOMENTO DE LUCIDED, NO ENTIENDO MUY BIEN COMO FUNCIONA, PERO FUNCIONA QUE ES LO IMPORTANTE
+    public ArrayList<LocalDateTime> obtenerHuecosDisponibles(ArrayList<Medico> medicos) {
+
+        ArrayList<LocalDateTime> huecos = new ArrayList<>();
+
+        //para no dar citas desde el mismo momento en el que se llama al metodo le sumamos TIEMPO_CITA
+        LocalDateTime ahora = LocalDateTime.now().plusMinutes(TIEMPO_CITA);
+
+        for (int dia = 0; dia < DIAS_BUSQUEDA; dia++) {
+
+            // Día que estamos analizando
+            LocalDateTime fechaDia = ahora.toLocalDate().plusDays(dia).atStartOfDay();
+
+            // Horarios laborales
+            LocalDateTime inicio = fechaDia.withHour(8).withMinute(0);
+            LocalDateTime fin = fechaDia.withHour(15).withMinute(0);
+
+            // con esto evitamos dar horas ANTES de ahora, suena enrevesado, pero no puedes dar una cita que ya ha pasado.
+            if (dia == 0 && inicio.isBefore(ahora)) {
+                inicio = ahora; // esto hace que el while no se ejecute, y pase al siguiente dia
+            }
+
+            LocalDateTime actual = inicio;
+
+            while (!actual.isAfter(fin)) {
+
+                //miramos si para el hueco hay almenos un medico disponible
+                for (Medico m : medicos) {
+                    // contar las citas del medico
+                    int citasDia = 0;
+                    for (Cita c : agendaCitas) {
+                        if (!c.isAnulada()
+                                && c.getMedico().equals(m)
+                                && c.getFechaCita().toLocalDate().equals(actual.toLocalDate())) {
+                            citasDia++;
+                        }
+                    }
+
+                    // Si ya ha alcanzado el máximo de citas, ignorarlo para el resto de huecos del día
+                    if (citasDia >= m.getMAXCITASDIARIAS()) continue;
+
+                    // Si está libre, añadimos hueco y pasamos al siguiente
+                    if (estaLibre(m, actual)) {
+                        huecos.add(actual);
+                        break;
+                    }
+                }
+
+                actual = actual.plusMinutes(TIEMPO_CITA);
+            }
+        }
+
+        return huecos;
     }
 
 }

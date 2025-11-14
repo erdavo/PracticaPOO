@@ -1,6 +1,15 @@
 1. Uso de trim() en las entradas
 Se utiliza trim() para eliminar espacios accidentales en los datos introducidos
 por el usuario y evitar errores en las validaciones.
-Ejemplo: si el usuario escribe 123456789 A o 123456789A, el sistema lo interpreta correctamente como 123456789A.
+Ejemplo: si el usuario escribe 123456789 A o 123456789A, el sistema lo interpreta
+correctamente como 123456789A.
 No se comenta cada uso para evitar repeticiones.
 
+No hemos seguido al pie de la letra el UML, porque por ejemplo,especialista,
+hemos creado un Enum para evitar errores ortograficos y que la seleccion
+de especialidad(incluyendo en ella medicina general) sea mas sencilla .
+
+Suponemos por simplicidad que un medico no puede "ser" de dos especialidades a la vez.
+
+Hemos añadido un horario de los medicos, para que no genere horas a las 3 de la mañana,
+esto es un requisito de diseño

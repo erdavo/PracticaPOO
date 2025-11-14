@@ -1,4 +1,7 @@
-package PACKAGE_NAME;
-
-public class Especialidad {
+public enum Especialidad {
+    MEDICINA_GENERAL,
+    CARDIOLOGIA,
+    DERMATOLOGIA,
+    PEDIATRIA,
+    //... SE PUEDEN AÑADIR TANTAS COMO QUIERAS, SIEMPRE Y CUANDOS SE ACTUALICE EL CODIGO
 }

@@ -51,4 +51,10 @@ public abstract class Usuario implements Serializable {
         //he puesto IgnoreCase para que si tenemos 12345678A y 12345678a,
         // sean lo mismo sin tener que cambiar de minus a mayus
     }
+
+    @Override
+    public int hashCode() {
+        return getDni().toUpperCase().hashCode();
+    }
+
 }

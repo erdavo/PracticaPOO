@@ -2,14 +2,14 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 public class Plantilla implements Serializable {
+    private final ArrayList<Usuario> plantilla;
 
-    private ArrayList<Usuario> plantilla;
     public Plantilla(){
         plantilla= new ArrayList<>();
         // Usuarios de ejemplo cargados por defecto
-        plantilla.add(new Admin("1", 1234567890L));                          // Admin general
-        plantilla.add(new AdminCentroSalud("2", 2234567890L, "Centro Norte")); // Admin de centro
-        plantilla.add(new Medico("3", 3234567890L, "Centro Norte", "Cardiología")); // Médico
+        plantilla.add(new Admin("1", 1234567890L)); // Administrador general
+        plantilla.add(new AdminCentroSalud("2", 2234567890L, "Centro Norte")); // Admin de un centro de salud
+        plantilla.add(new Medico("3", 3234567890L, "Centro Norte", Especialidad.CARDIOLOGIA)); // Médico
 
 
     }
@@ -17,7 +17,7 @@ public class Plantilla implements Serializable {
         return plantilla;
     }
 
-    public boolean anadirPlantilla(Usuario usuario) {
+    public boolean anadirUsuarioAPlantilla(Usuario usuario) {
         if (!(usuario instanceof Paciente) && !plantilla.contains(usuario)) {
             plantilla.add(usuario);
             return true;
@@ -40,6 +40,18 @@ public class Plantilla implements Serializable {
             }
         }
         return null;
+    }
+
+    public ArrayList<Medico> getMedicosPorEspecialidad(Especialidad especialidad){
+        ArrayList<Medico> list = new ArrayList<>();
+        for(Usuario u : plantilla){
+            if (u instanceof Medico medico){// es lo mismo que luego castear u a Medico
+                if (medico.getEspecialidad().equals(especialidad)){
+                    list.add(medico);
+                }
+            }
+        }
+        return list;
     }
 
 }

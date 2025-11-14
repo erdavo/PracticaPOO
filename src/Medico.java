@@ -7,34 +7,32 @@ import javax.tools.JavaCompiler;
  */
 
 public class Medico extends Usuario{
-    private final String especialidad;
+    private final Especialidad especialidad;
     private final String centro;
     private final int MAXCITASDIARIAS = 20;
-    private AgendaCita citas;
+    // private AgendaCita citas; esto no porque el medico no tiene una agenda propia, solo visualiza la agenda general
+    // por ejemplo, en un hospital, cada medico no tiene una agenda con sus citas, se mete al ordenador y
+    // mira las citas de una base de datos de todas las citas
 
-    public Medico(String dni, long cipa, String centro, String especialidad){
+    public Medico(String dni, long cipa, String centro, Especialidad especialidad){
         super(dni,cipa);
-
-        if (especialidad == null || especialidad.isEmpty()){
-            throw new IllegalArgumentException("Especialidad no valida.");
-        }
         this.especialidad=especialidad;
-
         if (centro == null || centro.isEmpty()){
             throw new IllegalArgumentException("Centro no valido.");
         }
         this.centro=centro;
-
-        this.citas= new AgendaCita();
+//        this.citas= new AgendaCita(); por consecuente con lo del atributo, esto tampoco
     }
 
 
-    public String getEspecialidad() {
+    public Especialidad getEspecialidad() {
         return especialidad;
     }
+
     public String getCentro() {
         return centro;
     }
+
     public int getMAXCITASDIARIAS() {
         return MAXCITASDIARIAS;
     }
