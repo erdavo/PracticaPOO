@@ -14,6 +14,16 @@ public class Medico extends Usuario{
     // por ejemplo, en un hospital, cada medico no tiene una agenda con sus citas, se mete al ordenador y
     // mira las citas de una base de datos de todas las citas
 
+    public Medico(String dni, long cipa, String centro, Especialidad especialidad, String nombre){
+        super(dni,cipa, nombre);
+        this.especialidad=especialidad;
+        if (centro == null || centro.isEmpty()){
+            throw new IllegalArgumentException("Centro no valido.");
+        }
+        this.centro=centro;
+//        this.citas= new AgendaCita(); por consecuente con lo del atributo, esto tampoco
+    }
+
     public Medico(String dni, long cipa, String centro, Especialidad especialidad){
         super(dni,cipa);
         this.especialidad=especialidad;
@@ -36,15 +46,5 @@ public class Medico extends Usuario{
     public int getMAXCITASDIARIAS() {
         return MAXCITASDIARIAS;
     }
-
-    @Override
-    public String toString(){
-        return "Medico: { " +
-                "  Dni:" + getDni() +
-                ", Cipa: " + getCipa() +
-                ", Especialidad: " + getEspecialidad() +
-                ", Centro: " + getCentro() + " }";
-    }
-
 
 }

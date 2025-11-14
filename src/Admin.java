@@ -5,9 +5,12 @@
 
 public class Admin extends Usuario{
 
+    public Admin(String dni, long cipa, String nombre) {
+        super(dni, cipa, nombre);
+    }
+
     public Admin(String dni, long cipa) {
         super(dni, cipa);
     }
-
 
 }

@@ -20,7 +20,6 @@ public class AgendaCita {
         }
         agendaCitas.add(cita);
     }
-
     public void addCita(LocalDateTime fechaCita, Paciente paciente, Medico medico){
         addCita(new Cita(fechaCita,paciente, medico));
     }
@@ -41,7 +40,6 @@ public class AgendaCita {
     /** Dada una lista de medicos de una misma especialidad, devuelve todas las horas en las
      * que al menos un médico de esos está libre en los proximos 7 días, por ejemplo
      */
-    //TODO LO HE HECHO EN UN MOMENTO DE LUCIDED, NO ENTIENDO MUY BIEN COMO FUNCIONA, PERO FUNCIONA QUE ES LO IMPORTANTE
     public ArrayList<LocalDateTime> obtenerHuecosDisponibles(ArrayList<Medico> medicos) {
 
         ArrayList<LocalDateTime> huecos = new ArrayList<>();
@@ -49,23 +47,32 @@ public class AgendaCita {
         //para no dar citas desde el mismo momento en el que se llama al metodo le sumamos TIEMPO_CITA
         LocalDateTime ahora = siguienteHueco(LocalDateTime.now());
 
-        for (int dia = 1; dia < DIAS_BUSQUEDA; dia++) {
+        for (int dia = 0; dia < DIAS_BUSQUEDA; dia++) {
 
-            // Día que estamos analizando
+            // Día en el que estamos dentro del bucle
             LocalDateTime fechaDia = ahora.toLocalDate().plusDays(dia).atStartOfDay();
 
             // Horarios laborales
-            LocalDateTime inicio = fechaDia.withHour(7).withMinute(30);
-            LocalDateTime fin = fechaDia.withHour(17).withMinute(0);
+            LocalDateTime inicioHorario = fechaDia.withHour(7).withMinute(30);
+            LocalDateTime finHorario = fechaDia.withHour(17).withMinute(0);
 
-            // con esto evitamos dar horas ANTES de ahora, suena enrevesado, pero no puedes dar una cita que ya ha pasado.
-            if (dia == 0 && inicio.isBefore(ahora)) {
-                inicio = ahora; // esto hace que el while no se ejecute, y pase al siguiente dia
+            LocalDateTime actual;
+
+            if (dia == 0) {
+                actual = ahora;
+
+                // Si estamos fuera del horario que pase al siguiente día
+                if (actual.isAfter(finHorario)) {
+                    continue;
+                }
+            }
+            // ---------- RESTO DE DÍAS ----------
+            else {
+                actual = inicioHorario;
             }
 
-            LocalDateTime actual = inicio;
 
-            while (!actual.isAfter(fin)) {
+            while (!actual.isAfter(finHorario)) {
 
                 //miramos si para el hueco hay almenos un medico disponible
                 for (Medico m : medicos) {
@@ -128,19 +135,14 @@ public class AgendaCita {
     public void mostrarCitasPaciente(ArrayList<Cita> arrayListCitas){
         //LLamar al metodo de buscar citas de paciente para crear un arraylist
         //Mostar todas las citas del paciente
-
         for (int i = 0; i < arrayListCitas.size(); i++) {
-            System.out.println((i + 1) + ". " + arrayListCitas.get(i));
+            System.out.println((i + 1) + ". " + arrayListCitas.get(i) + " - Medico: " + arrayListCitas.get(i).getMedico().toString());
         }
 
     }
 
-    public void eliminarCita(Cita cita){
-        for (Cita c: agendaCitas){
-            if(c.equals(cita)){
-                c.cancelarCita("Modificar");
-            }
-        }
+    public void anularCita(Cita cita){
+        cita.cancelarCita("Modificación por paciente");
     }
 
     // =========== LOGICA DE ADMIN ========

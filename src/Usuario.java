@@ -10,8 +10,14 @@ public abstract class Usuario implements Serializable {
     private final String dni;  // Identificador (String)
     private final long cipa; // Código de 10 dígitos
 
+    //añadido a pesar del uml, explicado en "leeme.txt".
+    private String nombre;
 
     public Usuario(String dni, long cipa){
+        this(dni,cipa, "No definido");
+    }
+
+    public Usuario(String dni, long cipa, String nombre){
 
         this.dni = validarStrings(dni);
 
@@ -20,13 +26,14 @@ public abstract class Usuario implements Serializable {
         }
         this.cipa=cipa;
 
+        this.nombre = validarStrings(nombre);
 
     }
 
     
     public String validarStrings(String string){
         if (string == null || string.isEmpty()){
-            throw new IllegalArgumentException("Error en DNI, por favor, compruebe que el DNI introducido es valido.");
+            throw new IllegalArgumentException("Error, por favor, compruebe que los datos introducidos(DNI o Nombre) son validos.");
         }
         return string;
     }
@@ -35,9 +42,13 @@ public abstract class Usuario implements Serializable {
     public String getDni() { return dni; }
     public long getCipa() { return cipa; }
 
+    public String getNombre() {
+        return nombre;
+    }
+
     @Override
     public String toString(){
-        return "\nDNI: " + dni + "\nCIPA: " + cipa;
+        return nombre;
     }
 
     @Override

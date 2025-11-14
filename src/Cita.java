@@ -37,20 +37,6 @@ public class Cita {
     public Paciente getPaciente() {return paciente;}
     public Medico getMedico() {return medico;}
 
-    //Setters
-    public void setFechaCita(LocalDateTime fechaNueva) {
-        if (fechaNueva.isBefore(LocalDateTime.now())) {
-            throw new IllegalStateException("La fecha tiene que ser mayor a hoy.");
-        }
-        this.fechaCita = fechaNueva;
-    }
-
-    //esto reprograma la cita que llama al metodo, no otra
-    public void reprogramarCita(LocalDateTime fechaNueva){
-        if(isAnulada()) throw new IllegalStateException("No se puede reagendar una cita anulada.");
-        this.setFechaCita(fechaNueva);
-    }
-
 
     //esto cancela la cita que llama al metodo, no otra.
     public void cancelarCita(String causaAnulacion){
@@ -59,10 +45,6 @@ public class Cita {
             this.causaAnulacion = validarCausa(causaAnulacion);
             this.fechaCancelacion = LocalDateTime.now();
         }
-
-    }
-
-    public void modificarCita(){
 
     }
 
@@ -86,11 +68,10 @@ public class Cita {
     @Override
     public String toString() {
         DateTimeFormatter fmt = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
-        return "Cita{" +
-                "paciente=" + paciente +
-                ", medico=" + medico +
-                ", fechaCita=" + fechaCita.format(fmt) +
-                ", anulada=" + anulada +
-                '}';
+        if(isAnulada()){
+            System.out.println("Esta cita ha sido anulada -> ");
+        }
+        return "Fecha de la cita: " + fechaCita.format(fmt) +
+                "\nCon el médico: " + medico;
     }
 }

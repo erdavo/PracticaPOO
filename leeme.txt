@@ -1,4 +1,6 @@
-1. Uso de trim() en las entradas
+Hemos puesto que la clase Usuario tenga nombre, para que al iniciar sesion u otras acciones,
+podamos referirnos a cualquier Usuario por su nombre.
+
 Se utiliza trim() para eliminar espacios accidentales en los datos introducidos
 por el usuario y evitar errores en las validaciones.
 Ejemplo: si el usuario escribe 123456789 A o 123456789A, el sistema lo interpreta
