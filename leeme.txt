@@ -11,5 +11,5 @@ de especialidad(incluyendo en ella medicina general) sea mas sencilla .
 
 Suponemos por simplicidad que un medico no puede "ser" de dos especialidades a la vez.
 
-Hemos añadido un horario de los medicos, para que no genere horas a las 3 de la mañana,
+Hemos añadido un horario a los medicos, para que no genere horas a las 3 de la mañana,
 esto es un requisito de diseño

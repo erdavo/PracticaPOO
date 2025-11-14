@@ -1,4 +1,5 @@
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class Cita {
     private Paciente paciente;
@@ -70,13 +71,22 @@ public class Cita {
         Cita otra = (Cita) obj;
 
         return this.fechaCita.equals(otra.fechaCita)
-                && this.medico.equals(otra.medico)
-                && this.paciente.equals(otra.paciente);
+                && this.medico.equals(otra.medico);
     }
 
     @Override
     public int hashCode() {
-        return fechaCita.hashCode() + medico.hashCode() + paciente.hashCode();
+        return fechaCita.hashCode() + medico.hashCode();
     }
 
+    @Override
+    public String toString() {
+        DateTimeFormatter fmt = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
+        return "Cita{" +
+                "paciente=" + paciente +
+                ", medico=" + medico +
+                ", fechaCita=" + fechaCita.format(fmt) +
+                ", anulada=" + anulada +
+                '}';
+    }
 }

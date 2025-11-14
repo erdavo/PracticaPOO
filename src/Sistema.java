@@ -1,3 +1,4 @@
+import java.sql.SQLOutput;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -122,7 +123,7 @@ public class Sistema {
         do {
             System.out.println("\n--- MENÚ PACIENTE ---");
             System.out.println("1. Solicitar nueva cita");
-            System.out.println("2. Modificar teléfono");
+            System.out.println("2. Modificar citas");
             System.out.println("3. Consultar mis datos");
             System.out.println("4. Cancelar cita");
             System.out.println("5. Ver mis citas");
@@ -140,11 +141,14 @@ public class Sistema {
 
             switch (opcion) {
                 case 1 -> {
-                    System.out.println("Ha seleccionado: Solicitar cita médica (implementando).");
+                    System.out.println("Ha seleccionado: Solicitar cita médica (implementado).");
                     solicitarCitaMedica(sc, paciente);
                 }
 
-                case 2 -> System.out.println("Modificar teléfono (no implementado).");
+                case 2 -> {
+                    System.out.println("Ha seleccionado: Modificar cita (en proceso).");
+                    modificarCitaMedica(sc, paciente);
+                }
                 case 3 -> System.out.println("Mostrando datos personales...");
                 case 4 -> System.out.println("Cancelar cita (no implementado).");
                 case 5 -> System.out.println("Mostrando citas programadas (no implementado).");
@@ -279,6 +283,8 @@ public class Sistema {
         //almacenamos la que sea que nos diga
         Especialidad especialidad = Especialidad.values()[opcion -1];
 
+
+        //TODO
         // tenemos que mostrar las citas disponibles para que pueda elegir
         ArrayList<Medico> listMedicos = plantilla.getMedicosPorEspecialidad(especialidad);
         if(listMedicos.isEmpty()){
@@ -340,4 +346,22 @@ public class Sistema {
             i++;
         }
     }
+    
+    public void modificarCitaMedica(Scanner sc, Paciente paciente){
+        //Buscar dentro de la Lista de citas todas las citas que tiene el paciente y gaurdarlo en un arraylist
+        ArrayList<Cita> citasPaciente = agendaCitas.buscarCitasPaciente(paciente);
+        if(citasPaciente.isEmpty()){
+            System.out.println("No tienes citas todavia");
+            return;
+        }
+        agendaCitas.mostrarCitasPaciente(citasPaciente);
+
+        //Mostrar todas las citas que tiene ese paciente y que seleccione la que quiere modificar
+        //Eliminar de la agenda del médico la cita anulada.
+        //Cambiar el estado de la cita y que ponga el motivo.
+        //Notificcar al usuario que su cita se ha modificado correctamente
+
+    }
+
+
 }
