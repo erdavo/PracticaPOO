@@ -6,7 +6,7 @@ public class ListaPaciente {
     public ListaPaciente(){
 
         listaPacientes= new ArrayList<>();
-        listaPacientes.add(new Paciente("4A", 4234567890L, "Pedro", "Direccion1", 1));
+        listaPacientes.add(new Paciente("4A", 4234567890L, "Daniel Navas Jimenez", "Calle manolito gafotas, 3", 676815412));
     }
 
     public ArrayList<Paciente> getListaPacientes() {

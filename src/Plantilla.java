@@ -9,7 +9,7 @@ public class Plantilla implements Serializable {
         // Usuarios de ejemplo cargados por defecto
         plantilla.add(new Admin("1", 1234567890L)); // Administrador general
         plantilla.add(new AdminCentroSalud("2", 2234567890L, "Centro Norte")); // Admin de un centro de salud
-        plantilla.add(new Medico("3", 3234567890L, "Centro Norte", Especialidad.CARDIOLOGIA, "NombreMedico")); // Médico
+        plantilla.add(new Medico("3", 3234567890L, "Centro Norte", Especialidad.CARDIOLOGIA, "Dr. House")); // Médico
 
 
     }

@@ -122,21 +122,22 @@ public class AgendaCita {
         return t.plusHours(1).withMinute(0).withSecond(0).withNano(0);
     }
 
-    public ArrayList<Cita> buscarCitasPaciente(Paciente paciente){
-        ArrayList<Cita> citasPaciente = new ArrayList<>();
+    public ArrayList<Cita> obtenerCitas(Usuario usuario){
+        ArrayList<Cita> citasUsuario = new ArrayList<>();
+        // comprobamos si el dni del ususario que es ha metido es un paciente o un medi
         for(Cita c: agendaCitas){
-            if (c.getPaciente().equals(paciente)) {
-                citasPaciente.add(c);
+            if (c.getPaciente().equals(usuario) || c.getMedico().equals(usuario)) {
+                citasUsuario.add(c);
             }
         }
-        return citasPaciente;
+        return citasUsuario;
     }
 
-    public void mostrarCitasPaciente(ArrayList<Cita> arrayListCitas){
+    public void mostrarCitas(ArrayList<Cita> arrayListCitas){
         //LLamar al metodo de buscar citas de paciente para crear un arraylist
         //Mostar todas las citas del paciente
         for (int i = 0; i < arrayListCitas.size(); i++) {
-            System.out.println((i + 1) + ". " + arrayListCitas.get(i) + " - Medico: " + arrayListCitas.get(i).getMedico().toString());
+            System.out.println((i + 1) + ". " + arrayListCitas.get(i).toString());
         }
 
     }
@@ -144,6 +145,7 @@ public class AgendaCita {
     public void anularCita(Cita cita){
         cita.cancelarCita("Modificación por paciente");
     }
+
 
     // =========== LOGICA DE ADMIN ========
 }

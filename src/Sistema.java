@@ -1,3 +1,4 @@
+    import javax.management.Notification;
     import java.time.LocalDateTime;
     import java.time.format.DateTimeFormatter;
     import java.util.ArrayList;
@@ -9,12 +10,17 @@
         private AgendaCita agendaCitas;
         private Plantilla plantilla;
 
+        private static final DateTimeFormatter FMT_FECHA = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
 
         public Sistema() {
             this.listaPacientes = new ListaPaciente();
             this.agendaConsultas = new AgendaConsultas();
             this.plantilla = new Plantilla();
             this.agendaCitas = new AgendaCita();
+        }
+
+        public void inicarPrograma(){
+            iniciarSesion();
         }
 
         /**
@@ -142,8 +148,8 @@
                     }
 
                     case 2 -> {
-                        System.out.println("Ha seleccionado: Modificar cita (en proceso).");
-                        modificarCitaMedica(sc, paciente);
+                        System.out.println("Ha seleccionado: Modificar cita (implementado).");
+                        modificarCitaConMismoMedico(sc, paciente);
                     }
                     case 3 -> {
                         System.out.println("Cancelar cita (implementando).");
@@ -152,10 +158,10 @@
                     case 4 -> {
                         System.out.println("Ha seleccionado mostrar mis citas. (implementado).");
 
-                        if(agendaCitas.buscarCitasPaciente(paciente).isEmpty()){
+                        if(agendaCitas.obtenerCitas(paciente).isEmpty()){
                             System.out.println("No hay citas programadas todavía.");
                         }
-
+                        agendaCitas.mostrarCitas(agendaCitas.obtenerCitas(paciente));
                     }
                     case 0 -> System.out.println("Cerrando sesión...");
                     default -> System.out.println("Opción incorrecta.");
@@ -164,12 +170,15 @@
         }
 
         // Menu del medico
-        private void menuMedico(Scanner sc, Medico medico) {
+        private void menuMedico(Scanner sc, Medico medico){
             int opcion = -1;
             do {
                 System.out.println("\n--- MENÚ PERSONAL SANITARIO ---");
                 System.out.println("1. Ver agenda de citas");
-                System.out.println("2. Registrar consulta");
+                System.out.println("2. Reagendar todas las citas de un dia completo a otro"); //A cada cita se le pregunta si quiere modificarla en caso de que si lo unico que se tiene que hace es llamar a modificarfecha
+                // pedir al medico un dia concreto y verificar citas ese dia para el
+                // modificas cada una de las citas que existan (estrán almacenadas en un array o tal vez solo cada vez qeu llegues a la fecha de un dic concreto que se modifique)
+                // se notifica el cambio ("Se muestra un mensaje por pantalla diciendo "Se ha modificado la cita para x paciente"")
                 System.out.println("3. Prescribir medicación");
                 System.out.println("4. Consultar historial de paciente");
                 System.out.println("0. Cerrar sesión");
@@ -185,7 +194,13 @@
                 sc.nextLine();
 
                 switch (opcion) {
-                    case 1 -> System.out.println("Mostrando agenda (no implementado).");
+                    case 1 -> {
+                        System.out.println("Mostrando agenda (implementado).");
+                        if(agendaCitas.obtenerCitas(medico).isEmpty()){
+                            System.out.println("No hay citas programadas todavía.");
+                        }
+                        agendaCitas.mostrarCitas(agendaCitas.obtenerCitas(medico));
+                    }
                     case 2 -> System.out.println("Registrar consulta médica (no implementado).");
                     case 3 -> System.out.println("Prescribir medicación (no implementado).");
                     case 4 -> System.out.println("Consultar historial del paciente (no implementado).");
@@ -263,7 +278,7 @@
         // Logica del paciente
         private void solicitarCitaMedica(Scanner sc, Paciente paciente) {
             // mostramos especialidades
-            System.out.println("Estas son las especialidades disponibles: \n");
+            System.out.println("Estas son las especialidades disponibles:");
             mostrarEspecialidades();
 
             int opcion;
@@ -305,11 +320,9 @@
 
             //mostramos que huecos hay.
             System.out.println("\nCitas disponibles:");
-            // Formato bonito para fechas
-            DateTimeFormatter fmt = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
 
             for (int i = 0; i < huecosDisponibles.size(); i++) {
-                System.out.println((i + 1) + ". " + huecosDisponibles.get(i).format(fmt));
+                System.out.println((i + 1) + ". " + huecosDisponibles.get(i).format(FMT_FECHA));
             }
 
             // Le pedimos al usuario uno de los huecos disponibles ¡OJO!: Esto todavía no es una cita
@@ -326,11 +339,12 @@
             //buscamos que medico tiene la hroa libre y el primero que encuentre con la hora libre, lo guardamos
             Medico medicoAsignado = null;
             for (Medico m : listMedicos){
-                if(agendaCitas.estaLibre(m, fechaElegida)){
+                if (agendaCitas.estaLibre(m, fechaElegida)){
                     medicoAsignado = m;
                     break;
                 }
             }
+
             if (medicoAsignado == null) {
                 System.out.println("Error al asignar médico. Intente más tarde.");
                 return;
@@ -339,41 +353,66 @@
             Cita nuevaCita = new Cita(fechaElegida, paciente, medicoAsignado);
             agendaCitas.addCita(nuevaCita);
             System.out.println("Cita creada correctamente:");
-            System.out.println("Fecha: " + fechaElegida.format(fmt));
+            System.out.println("Fecha: " + fechaElegida.format(FMT_FECHA));
             System.out.println("Médico: " + medicoAsignado);
 
 
         }
 
-        public void modificarCitaMedica(Scanner sc, Paciente paciente) {
+        private void modificarCitaConMismoMedico(Scanner sc, Paciente paciente){
 
-            Cita citaAntigua = seleccionarCita(sc, paciente);
-            if (citaAntigua == null) return; // usuario canceló
+            Cita citaAntigua = seleccionarCitaConcretaDePaciente(sc, paciente);
+            if (citaAntigua == null) return;
 
-            System.out.println("AVISO:");
-            System.out.println("Está a punto de modificar la cita, esta acción no tiene vuelta atrás. ¿Seguro que desdea continuar? (y/n)");
+            Medico medicoCita = citaAntigua.getMedico();
 
-            String confirm = sc.next();
-            if (confirm.equalsIgnoreCase("n")) {
-                System.out.println("Operación cancelada.");
+            ArrayList<Medico> soloEseMedico = new ArrayList<>();
+            soloEseMedico.add(medicoCita);
+            ArrayList<LocalDateTime> huecosDeEseMedico =  agendaCitas.obtenerHuecosDisponibles(soloEseMedico);
+
+            if(huecosDeEseMedico.isEmpty()){
+                System.out.println("Este medico no tiene huecos disponibles. No puede modificar la cita");
                 return;
             }
 
-//            agendaCitas.eliminarCita(citaAntigua);
-            System.out.println("La cita se modificará. Proceda a seleccionar una nueva...\n");
+            System.out.println("Estas con las dictas con su mismo médico: ");
 
-            solicitarCitaMedica(sc, paciente);
+            for (int i = 0; i < huecosDeEseMedico.size(); i++) {
+                System.out.println((i+1) + ". " + huecosDeEseMedico.get(i).format(FMT_FECHA));
+            }
 
-            System.out.println("La cita ha sido modificada correctamente.");
+            System.out.println("\n Indique la nueva hora de la cita: ");
+            int opcion;
+            do {
+                opcion = sc.nextInt();
+                sc.nextLine();
+            } while (opcion <= 0 || opcion > huecosDeEseMedico.size());
+
+            LocalDateTime huecoNuevo = huecosDeEseMedico.get(opcion-1);
+//            for (Cita c : agendaCitas.getArrayListCitas()) {
+//                if (c.equals(citaAntigua)){
+//                    c.setFechaCita(huecoNuevo);
+//                    agendaCitas.getArrayListCitas().set(pos , c);
+//                }
+//                pos++;
+//            }
+            for (int pos = 0; pos < agendaCitas.getArrayListCitas().size(); pos++) {
+                Cita c = agendaCitas.getArrayListCitas().get(pos);
+                if (c.equals(citaAntigua)){
+                    c.setFechaCita(huecoNuevo);
+                    agendaCitas.getArrayListCitas().set(pos , c);
+                }
+            }
+            System.out.println("\n La cita ha sido modificada correctamente. Gracias");
+
         }
 
-        public void cancelarCitaMedica(Scanner sc, Paciente paciente) {
-            Cita cita = seleccionarCita(sc, paciente);
+        private void cancelarCitaMedica(Scanner sc, Paciente paciente) {
+            Cita cita = seleccionarCitaConcretaDePaciente(sc, paciente);
             if (cita == null) return;
 
             System.out.println("¿Seguro que desea cancelar esta cita? (y/n)");
-            String confirm = sc.next();
-
+            String confirm = sc.nextLine();
             if (confirm.equalsIgnoreCase("y")) {
                 System.out.println("Por favor, especifique el motivo de la cancelación: ");
                 String motivo = sc.nextLine();
@@ -388,13 +427,13 @@
          *
          *
          * */
-        private Cita seleccionarCita(Scanner sc, Paciente paciente) {
-            ArrayList<Cita> citasPaciente = agendaCitas.buscarCitasPaciente(paciente);
+        private Cita seleccionarCitaConcretaDePaciente(Scanner sc, Paciente paciente) {
+            ArrayList<Cita> citasPaciente = agendaCitas.obtenerCitas(paciente);
             if (citasPaciente.isEmpty()) {
                 System.out.println("No tienes citas todavía.");
                 return null;
             }
-            agendaCitas.mostrarCitasPaciente(citasPaciente);
+            agendaCitas.mostrarCitas(citasPaciente);
 
             int opcion;
             do {

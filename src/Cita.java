@@ -24,6 +24,14 @@ public class Cita {
         return string;
     }
 
+    public void setFechaCita(LocalDateTime fechaCita) {
+        this.fechaCita = fechaCita;
+    }
+
+    Cita(LocalDateTime fechaCita) {
+        this.fechaCita = fechaCita;
+    }
+
     //Getters
     public LocalDateTime getFechaCita(){
         return fechaCita;
@@ -42,7 +50,7 @@ public class Cita {
     public void cancelarCita(String causaAnulacion){
         if (!anulada){
             this.anulada = true;
-            this.causaAnulacion = validarCausa(causaAnulacion);
+            this.causaAnulacion = causaAnulacion;
             this.fechaCancelacion = LocalDateTime.now();
         }
 
@@ -67,11 +75,18 @@ public class Cita {
 
     @Override
     public String toString() {
+        String out = "";
         DateTimeFormatter fmt = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
+        out += "Fecha de la cita: " + fechaCita.format(fmt) +
+                "\nMédico: " + medico + " - Especialidad: "
+                + getMedico().getEspecialidad()
+                + "\nPaciente: " + paciente  + "\n";
+
         if(isAnulada()){
-            System.out.println("Esta cita ha sido anulada -> ");
+            out += "\nEsta cita ha sido anulada el dia: " + fechaCancelacion +
+            "\nMotivo: " + causaAnulacion;
         }
-        return "Fecha de la cita: " + fechaCita.format(fmt) +
-                "\nCon el médico: " + medico;
+
+        return out;
     }
 }
